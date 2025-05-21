@@ -1,0 +1,100 @@
+{
+    "Filters": [
+        {
+            "Name": "Publicadas con Stock",
+            "Description": "Todos los productos publicados que tiene stock\nRESTRICCIONES ESTÁNDAR: NO LISTAR, ANTIGUAS, SEPARADAS, solo Imágenes",
+            
+            "FolderRejectForced": [
+                {"Match": "NO LISTAR"}
+            ],
+
+            "FolderAcceptForced": [],
+
+            "FolderRejectIfFound": [
+                {"Match": "NO PUBLICADAS"},
+                {"Match": "CON MEDIDAS"},
+                {"Match": "ANTIGUAS"},
+                {"Match": "SEPARADAS"},
+                {"Match": "SIN STOCK"}
+            ],
+
+            "FolderAcceptIfFound": [
+                {"Match": "PUBLICADAS","Type": "Exact"}
+            ],
+            
+
+            "FileRejectRegex": [],
+            "FileAcceptRegex": [
+                "\\.png$",
+                "\\.jpg$",
+                "\\.webp$"
+            ],
+
+            "CaseSensitive": false
+        },
+        
+        {
+            "Name": "Publicadas sin Stock",
+            "Description": "Todos los productos publicados que sin stock\nRESTRICCIONES ESTÁNDAR: NO LISTAR, ANTIGUAS, SEPARADAS, solo Imágenes",
+            
+            "FolderRejectForced": [
+                {"Match": "NO LISTAR"}
+            ],
+
+            "FolderAcceptForced": [],
+
+            "FolderRejectIfFound": [
+                {"Match": "NO PUBLICADAS"},
+                {"Match": "CON MEDIDAS"},
+                {"Match": "ANTIGUAS"},
+                {"Match": "SEPARADAS"}
+            ],
+
+            "FolderAcceptIfFound": [
+                {"Match": "PUBLICADAS/SIN STOCK","Type": "Exact"}
+            ],
+            
+
+            "FileRejectRegex": [],
+            "FileAcceptRegex": [
+                "\\.png$",
+                "\\.jpg$",
+                "\\.webp$"
+            ],
+
+            "CaseSensitive": false
+        },
+        
+        {
+            "Name": "No Publicadas",
+            "Description": "Todos los productos No publicados\nRESTRICCIONES ESTÁNDAR: NO LISTAR, ANTIGUAS, SEPARADAS, solo Imágenes",
+            
+            "FolderRejectForced": [
+                {"Match": "NO LISTAR"}
+            ],
+
+            "FolderAcceptForced": [],
+
+            "FolderRejectIfFound": [
+                {"Match": "CON MEDIDAS"},
+                {"Match": "ANTIGUAS"},
+                {"Match": "SEPARADAS"},
+                {"Match": "PUBLICADAS","Type": "Exact"}
+            ],
+
+            "FolderAcceptIfFound": [
+                {"Match": "NO PUBLICADAS"}
+            ],
+            
+
+            "FileRejectRegex": [],
+            "FileAcceptRegex": [
+                "\\.png$",
+                "\\.jpg$",
+                "\\.webp$"
+            ],
+
+            "CaseSensitive": false
+        }
+    ]
+}

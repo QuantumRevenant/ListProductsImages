@@ -1,0 +1,21 @@
+# Build y temporales
+bin/
+obj/
+
+# Configs de usuario/editor
+.vscode/
+*.user
+*.suo
+
+# Archivos generados
+*.log
+*.tmp
+*.xml
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Rider y JetBrains
+.idea/
+*.DotSettings
