@@ -1,71 +1,74 @@
-# 📄 ListProductsImages
+# ListProductsImages 🖼️
 
 Console application in C# (.NET 8.0) that allows you to explore a directory and its subdirectories, list all found files, filter them using defined conditions (regex, folder names, extensions, etc.), and generate a `.txt` file with the results.
 
-The system uses interactive console menus to select the base path, define filters, and set output options.
+The system uses an interactive console menu to select the base path, define filters, and set output options.
 
-## 📜 Table of Contents
+## Table of Contents 📜
 
-- [Requirements](#-requirements)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Output Example](#-output-example)
-- [Key Features](#-key-features)
-- [License](#-license)
-- [Contact](#-contact)
-- [Contributors](#-contributors)
-- [Dependencies](#-dependencies)
+- [Requirements](#requirements-📦)  
+- [Installation](#installation-⚙️)  
+- [Usage](#usage-🚀)  
+- [Output Example](#output-example-🛠️)  
+- [Key Features](#key-features-📁)  
+- [License](#license-📝)  
+- [Contact](#contact-✉️)  
+- [Contributing](#contributing-🤝)  
+- [Contributors](#contributors-👥)  
+- [Notice](#notice-⚠️)  
+- [Dependencies](#dependencies-🧩)  
+- [Changelog](#changelog-📘)
 
 ---
 
-## 📦 Requirements
+## Requirements 📦
 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
 ---
 
-## ⚙️ Installation
+## Installation ⚙️
 
 Clone this repository:
 
-```bash
+```
 git clone https://github.com/your-user/ListProductsImages.git
 cd ListProductsImages
 ```
 
 ---
 
-## 🚀 Usage
+## Usage 🚀
 
 Build the solution:
 
-```bash
+```
 dotnet build ListProductsImages.sln
 ```
 
 Run the main project:
 
-```bash
+```
 dotnet run --project ListProductsImages/ListProductsImages.csproj
 ```
 
 The application will launch an interactive console interface where you can:
 
-* View the current working directory.
-* Change the base directory path.
-* Define filtering rules (by folder name or file name regex).
-* Select the output path and file name.
-* Generate and save the filtered file list as a `.txt`.
+- View the current working directory
+- Change the base directory path
+- Define filtering rules (by folder name or file name regex)
+- Select the output path and file name
+- Generate and save the filtered file list as a `.txt`
 
 > **Note**: Command-line argument support will be added soon.
 
 ---
 
-## 🛠️ Output Example
+## Output Example 🛠️
 
 ### File System Structure
 
-```bash
+```
 /Root/
 ├── /Approved Folder/
 │   ├── Cod001.jpg
@@ -98,12 +101,12 @@ The application will launch an interactive console interface where you can:
 
 ```
 Reject: "Disapproved" | Match Mode: Contains  
-Accept: "Approved"     | Match Mode: Exact
+Accept: "Approved"    | Match Mode: Exact
 ```
 
 ### Output File
 
-```bash
+```
 Cod001
 Cod002
 Cod003
@@ -120,43 +123,54 @@ Cod018
 
 ---
 
-## 📁 Key Features
+## Key Features 📁
 
-* Recursive directory exploration.
-* Customizable filters (regex for filenames, folder exclusion, etc.).
-* Export results to a `.txt` file.
-* Interactive console menu for manual configuration (no CLI args required yet).
+- Recursive directory exploration
+- Customizable filters (filename regex, folder name includes/excludes)
+- Export filtered results to a `.txt` file
+- Interactive console interface (CLI arguments will come in future versions)
 
 ---
 
-## 📝 License
+## License 📝
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 ---
 
-## ✉️ Contact
+## Contact ✉️
 
 If you have any questions or feedback, feel free to reach out:
 
-[![X (Formerly Twitter)](https://img.shields.io/badge/X%20(formerly%20Twitter)-%23000000.svg?logo=X&logoColor=white)](https://twitter.com/QuantumRevenant)  
-[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/YourGitHubUsername)
+[![X (Formerly Twitter)](https://img.shields.io/badge/X_(Twitter)%09--%40QuantumRevenant-%23000000.svg?logo=X&logoColor=white)](https://twitter.com/QuantumRevenant)  
+[![GitHub](https://img.shields.io/badge/GitHub%09--%40QuantumRevenant-%23121011.svg?logo=github&logoColor=white)](https://github.com/YourGitHubUsername)
 
 ---
 
-## 🤝 Contributing
+## Contributing 🤝
 
 See [CONTRIBUTING](CONTRIBUTING.md) for contribution guidelines.
 
 ---
 
-## 👥 Contributors
+## Contributors 👥
 
 - [QuantumRevenant](https://github.com/QuantumRevenant)
 
 ---
 
-## ⚠️ Notice
+## Notice ⚠️
 
-This codebase and documentation are primarily written in Spanish or a mix of Spanish and English. If you intend to adapt this project to a different programming language (e.g., C++ or Java), make the necessary modifications accordingly.
+This codebase and its documentation were initially written in Spanish or a Spanish-English mix. If you intend to adapt this project to a different programming language (e.g., C++ or Java), make the necessary adjustments accordingly.
 
+---
+
+## Dependencies 🧩
+
+This project relies solely on the .NET 8.0 SDK. Additional utilities are included within the repository.
+
+---
+
+## Changelog 📘
+
+See [CHANGELOG](CHANGELOG.md) for changes
