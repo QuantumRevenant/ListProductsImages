@@ -1,13 +1,22 @@
 # Changelog
 
-Todos los cambios notables a este proyecto serán documentados en este archivo.
+All notable changes to this project will be documented in this file.
 
-El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/)
-y este proyecto sigue [SemVer](https://semver.org/lang/es/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.0] - 2025-06-12
+### Added
+- Folder and image counters in the interactive interface for improved user feedback.
+- Integration of the `QuantumKit` submodule as a replacement for the previous `Utils` folder.
+
+### Changed
+- Project structure refactored for compatibility with **Visual Studio 2022**.
+- Minor internal refactoring to accommodate new modular layout.
 
 ## [1.0.0] - 2025-05-21
-### Añadido
-- Proyecto inicial funcional.
-- Estructura modular con `Core`, `Pipeline`, `Utils`.
-- Menú de consola interactivo.
-- Archivo de configuración `DefaultFilterPresets.json`.
+### Added
+- Functional initial version of the project.
+- Modular structure with `Core`, `Pipeline`, and `Utils`.
+- Interactive console menu.
+- Default filter configuration file (`DefaultFilterPresets.json`).
