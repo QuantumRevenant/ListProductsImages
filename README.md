@@ -17,7 +17,7 @@ The system offers an interactive menu interface to set paths, filters, and outpu
 Clone this repository:
 
 ```
-git clone https://github.com/your-user/ListProductsImages.git
+git clone https://github.com/QuantumRevenant/ListProductsImages.git
 cd ListProductsImages
 ```
 
