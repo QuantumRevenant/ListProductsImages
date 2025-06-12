@@ -1,5 +1,5 @@
 using ListProductsImages.Core;
-using QuantumRevenant.Utilities;
+using QuantumKit.Diagnostics;
 
 namespace ListProductsImages.Pipeline
 {
@@ -7,7 +7,7 @@ namespace ListProductsImages.Pipeline
     {
         public void Pipeline(ProgramCriteria criteria)
         {
-            var totalTimer = new QuantumTools.StopwatchLogger("Tiempo total");
+            var totalTimer = new DiagnosticsUtils.StopwatchLogger("Tiempo total");
 
             //Program classes
             var dataSource = new FileDataSource();
@@ -19,22 +19,22 @@ namespace ListProductsImages.Pipeline
             IEnumerable<AdaptedFileInfo>? adaptedFiles = null;
             IEnumerable<AdaptedFileInfo>? selectedFiles = null;
 
-            QuantumTools.RunWithTimer(() =>
+            DiagnosticsUtils.RunWithTimer(() =>
             {
                 rawFilePaths = dataSource.GetFilePaths(criteria.ProcessCriteria.RootPath);
             }, "Recolectando datos... ", showDecimals: true);
 
-            QuantumTools.RunWithTimer(() =>
+            DiagnosticsUtils.RunWithTimer(() =>
             {
                 adaptedFiles = adapter.Adapt(rawFilePaths!, criteria.ProcessCriteria.RootPath);
             }, "Adaptando datos... ", showDecimals: true);
 
-            QuantumTools.RunWithTimer(() =>
+            DiagnosticsUtils.RunWithTimer(() =>
             {
                 selectedFiles = selector.Select(adaptedFiles!, criteria);
             }, "Seleccionando datos... ", showDecimals: true);
 
-            QuantumTools.RunWithTimer(() =>
+            DiagnosticsUtils.RunWithTimer(() =>
             {
                 sink.WriteResults(selectedFiles!, criteria.ProcessCriteria.OutputFile);
             }, "Escribiendo datos... ", showDecimals: true);

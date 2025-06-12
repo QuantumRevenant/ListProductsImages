@@ -20,3 +20,5 @@ Thumbs.db
 # Rider y JetBrains
 .idea/
 *.DotSettings
+
+publish/
