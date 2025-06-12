@@ -1,6 +1,6 @@
 namespace ListProductsImages.Core
 {
-    public class FilterContainer
+    internal class FilterContainer
     {
         public List<FilterCriteria> Filters { get; set; }
         public FilterContainer()

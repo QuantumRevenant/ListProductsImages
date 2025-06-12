@@ -1,6 +1,6 @@
 namespace ListProductsImages.Core
 {
-    class AdaptedFileInfo
+    internal class AdaptedFileInfo
     {
         public IEnumerable<string> Folders { get; private set; } // Todos los Folders a Evaluar
         public string CompletePath { get; private set; } 

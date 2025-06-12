@@ -1,6 +1,6 @@
 namespace ListProductsImages.Pipeline
 {
-    class FileDataSource
+    internal class FileDataSource
     {
         public IEnumerable<string> GetFilePaths(string path)
         {

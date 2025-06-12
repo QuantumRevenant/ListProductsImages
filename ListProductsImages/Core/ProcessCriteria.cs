@@ -1,6 +1,6 @@
 namespace ListProductsImages.Core
 {
-    class ProcessCriteria(string rootPath = "", string outputFile = "", bool inverseSearch = false)
+    internal class ProcessCriteria(string rootPath = "", string outputFile = "", bool inverseSearch = false)
     {
         public string RootPath { get; set; } = rootPath;
         public string OutputFile { get; set; } = outputFile;

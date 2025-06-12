@@ -2,7 +2,7 @@ using ListProductsImages.Core;
 
 namespace ListProductsImages.Pipeline
 {
-    class FileDataAdapter
+    internal class FileDataAdapter
     {
         public IEnumerable<AdaptedFileInfo> Adapt(IEnumerable<string> rawFilePaths, string basePath)
         {

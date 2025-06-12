@@ -1,13 +1,14 @@
-using QuantumRevenant.Utilities;
+using QuantumKit.Tools;
+using QuantumKit.Tools.IO;
 
 namespace ListProductsImages.Core
 {
-    public class AppSettings
+    internal class AppSettings
     {
         private static readonly string AppName = "ListProductsImages";
         private static readonly string settingsFileName = "settings.json";
         private static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        public static readonly string AppFamilyFolder = Path.Combine(AppDataFolder, QuantumTools.QuantumRevenantFolderPath);
+        public static readonly string AppFamilyFolder = Path.Combine(AppDataFolder, AppFolders.CompanyName);
         public static readonly string AppSpecificFolder = Path.Combine(AppFamilyFolder, AppName);
         public static readonly string settingsFilePath = Path.Combine(AppSpecificFolder, settingsFileName);
         // Rutas para la fuente de la lista de archivos

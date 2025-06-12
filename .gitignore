@@ -4,6 +4,7 @@ obj/
 
 # Configs de usuario/editor
 .vscode/
+.vs/
 *.user
 *.suo
 

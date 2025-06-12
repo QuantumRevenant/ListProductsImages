@@ -1,6 +1,6 @@
 namespace ListProductsImages.Core
 {
-    class ProgramCriteria
+    internal class ProgramCriteria
     {
         public FilterCriteria FilterCriteria { get; set; }
         public ProcessCriteria ProcessCriteria { get; set; }

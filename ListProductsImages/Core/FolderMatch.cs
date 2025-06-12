@@ -1,6 +1,6 @@
 namespace ListProductsImages.Core
 {
-    public class FolderMatch
+    internal class FolderMatch
     {
         public string Match { get; set; } = "";
 

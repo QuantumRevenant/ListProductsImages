@@ -1,9 +1,9 @@
 using ListProductsImages.Core;
-using QuantumRevenant.Utilities;
+using QuantumKit.Tools.TextUtils;
 
 namespace ListProductsImages.Pipeline
 {
-    class FileSelector
+    internal class FileSelector
     {
         public IEnumerable<AdaptedFileInfo> Select(IEnumerable<AdaptedFileInfo> unselectedFiles, ProgramCriteria criteria)
         {
@@ -42,12 +42,12 @@ namespace ListProductsImages.Pipeline
 
                 // Rechazo por regex
                 if (fileRejectRegex?.Any() == true &&
-                    QuantumTools.MatchAnyRegex(file.FileName, fileRejectRegex, caseSensitive))
+                    TextUtils.MatchAnyRegex(file.FileName, fileRejectRegex, caseSensitive))
                     continue;
 
                 // Aceptación por regex
                 if (fileAcceptRegex?.Any() == true &&
-                    !QuantumTools.MatchAnyRegex(file.FileName, fileAcceptRegex, caseSensitive))
+                    !TextUtils.MatchAnyRegex(file.FileName, fileAcceptRegex, caseSensitive))
                     continue;
 
                 // Si pasó todos los filtros

@@ -2,7 +2,7 @@ using ListProductsImages.Core;
 
 namespace ListProductsImages.Pipeline
 {
-    class FileDataSink
+    internal class FileDataSink
     {
         public void WriteResults(IEnumerable<AdaptedFileInfo> files, string outputFile)
         {

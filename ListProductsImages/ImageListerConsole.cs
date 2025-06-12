@@ -1,8 +1,9 @@
 using System.Text.Json;
 using ListProductsImages.Core;
 using ListProductsImages.Pipeline;
-using QuantumRevenant.ConsoleUtils;
-using QuantumRevenant.Utilities;
+using QuantumKit.UI;
+using QuantumKit.Tools.IO;
+using QuantumKit.Tools;
 
 namespace ListProductsImages
 {
@@ -100,7 +101,7 @@ namespace ListProductsImages
         private void LoadDefaultPresets()
         {
             string resourceName = "ListProductsImages.Resources.DefaultFilterPresets.json";
-            string json = QuantumTools.JsonFromEmbeddedResource(resourceName);
+            string json = JsonUtils.JsonFromEmbeddedResource(resourceName);
             _defaultFilterPresets = JsonSerializer.Deserialize<FilterContainer>(json) ?? new();
         }
         private void LoadUserSettings()
@@ -109,7 +110,7 @@ namespace ListProductsImages
             {
                 if (File.Exists(_settingsFilePath))
                 {
-                    string jsonString = QuantumTools.JsonFromFile(_settingsFilePath);
+                    string jsonString = JsonUtils.JsonFromFile(_settingsFilePath);
                     _userSettings = JsonSerializer.Deserialize<AppSettings>(jsonString) ?? new();
 
                     if (_userSettings == null)
@@ -164,7 +165,7 @@ namespace ListProductsImages
 
             do
             {
-                ConsoleMenu.ShowAndProcessMenu(
+                ConsoleMenuBuilder.ShowAndProcessMenu(
                     title: "Listado de Imágenes de Productos",
                     subtitle: $"PRECAUCIÓN: La busqueda se está realizando en:\n {_currentListSourcePath}.\n Cambialo en Preferencias.\nSelecciona tu opción:",
                     menuItems: _mainMenuItems,
@@ -181,7 +182,7 @@ namespace ListProductsImages
 
             List<FilterCriteria> allFilters = _defaultFilterPresets.Filters.Concat(_userSettings.CustomFiltersContainer.Filters).ToList();
 
-            FilterCriteria? selectedFilter = ConsoleMenu.ShowAndSelectItem("Selecciona el filtro para la Busqueda",
+            FilterCriteria? selectedFilter = ConsoleMenuBuilder.ShowAndSelectItem("Selecciona el filtro para la Busqueda",
                                                                             $"PRECAUCIÓN: La busqueda se está realizando en:\n {_currentListSourcePath}.\n Cambialo en Preferencias.",
                                                                             allFilters, fc => fc.Name);
 
@@ -191,9 +192,9 @@ namespace ListProductsImages
             Console.WriteLine($"Se escogió \"{selectedFilter.Name}\"");
             Console.WriteLine($"Descripción: {selectedFilter.Description}");
             Console.WriteLine();
-            if (!ConsoleMenu.Confirm("¿Confirma que desea ese filtro?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea ese filtro?")) { return; }
 
-            bool inverseSearch = ConsoleMenu.Confirm("¿Deseas mostrar solo los archivos que coinciden con los criterios, o los que no coinciden?", defaultIfInvalid: false, trueKey: 'n', falseKey: 'c');
+            bool inverseSearch = ConsoleMenuBuilder.Confirm("¿Deseas mostrar solo los archivos que coinciden con los criterios, o los que no coinciden?", defaultIfInvalid: false, trueKey: 'n', falseKey: 'c');
 
             ProcessCriteria processCriteria = new(_currentListSourcePath, Path.Combine(_currentOutputDirectory, _userSettings.OutputFileName), inverseSearch);
 
@@ -203,10 +204,10 @@ namespace ListProductsImages
             SaveUserSettings(); // Llamarías a esto cuando realmente se guarde la config
 
             Console.WriteLine($"\nIniciando búsqueda con filtro '{criteria.FilterCriteria?.Name}' en '{criteria.ProcessCriteria.RootPath}'...");
-            ConsoleMenu.Pause();
+
             _processor.Pipeline(criteria);
 
-            ConsoleMenu.Pause($"Búsqueda completada. Resultados en '{criteria.ProcessCriteria.OutputFile}'. Presiona Enter...");
+            ConsoleMenuBuilder.Pause($"Búsqueda completada. Resultados en '{criteria.ProcessCriteria.OutputFile}'. Presiona Enter...\a");
             return;
         }
 
@@ -216,7 +217,7 @@ namespace ListProductsImages
             {
                 Console.WriteLine("\n--- Filtros Personalizados ---");
 
-                ConsoleMenu.ShowAndProcessMenu(
+                ConsoleMenuBuilder.ShowAndProcessMenu(
                         title: "Filtros",
                         subtitle: "PRECAUCIÓN: Algunas de estas acciones son irreversibles.",
                         menuItems: _customFilterItems,
@@ -232,7 +233,7 @@ namespace ListProductsImages
         private void ShowFilters(List<FilterCriteria> filterCriterias)
         {
             Console.Clear();
-            FilterCriteria? selectedFilter = ConsoleMenu.ShowAndSelectItem("Selecciona el filtro para la Consultar", "", filterCriterias, fc => fc.Name);
+            FilterCriteria? selectedFilter = ConsoleMenuBuilder.ShowAndSelectItem("Selecciona el filtro para la Consultar", "", filterCriterias, fc => fc.Name);
             ShowFilter(selectedFilter);
         }
         private void ShowFilter(FilterCriteria? filter)
@@ -255,7 +256,7 @@ namespace ListProductsImages
             $"Sensible a Mayúsculas: {(filter.CaseSensitive ? "Verdadero" : "Falso")}"
             );
 
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private void CreateCustomFilter()
@@ -263,7 +264,7 @@ namespace ListProductsImages
             Console.Clear();
             Console.WriteLine("--- Creación de Nuevo Filtro Personalizado ---");
             Console.WriteLine("Siga las instrucciones para definir las propiedades de su nuevo filtro.");
-            ConsoleMenu.Pause("Presiona Enter para comenzar...");
+            ConsoleMenuBuilder.Pause("Presiona Enter para comenzar...");
 
             FilterCriteria newFilter = new FilterCriteria();
 
@@ -278,7 +279,7 @@ namespace ListProductsImages
                                         .ToList();
             do
             {
-                filterName = ConsoleMenu.AskString("\nNombre del nuevo filtro (requerido, debe ser único): ", allowEmpty: false);
+                filterName = ConsoleMenuBuilder.AskString("\nNombre del nuevo filtro (requerido, debe ser único): ", allowEmpty: false);
                 nameExists = existingNames.Any(n => n.Equals(filterName, StringComparison.OrdinalIgnoreCase));
                 if (nameExists)
                 {
@@ -288,47 +289,47 @@ namespace ListProductsImages
             newFilter.Name = filterName;
 
             // 2. Descripción (Opcional)
-            newFilter.Description = ConsoleMenu.AskString("\nDescripción del filtro (opcional): ", allowEmpty: true);
+            newFilter.Description = ConsoleMenuBuilder.AskString("\nDescripción del filtro (opcional): ", allowEmpty: true);
 
             // 3. Sensibilidad a Mayúsculas/Minúsculas (Sí/No)
-            newFilter.CaseSensitive = ConsoleMenu.Confirm("\n¿El filtro debe ser sensible a mayúsculas/minúsculas para patrones y regex?", defaultIfInvalid: false);
+            newFilter.CaseSensitive = ConsoleMenuBuilder.Confirm("\n¿El filtro debe ser sensible a mayúsculas/minúsculas para patrones y regex?", defaultIfInvalid: false);
 
             // --- Configuración de Reglas de Carpetas ---
             Console.WriteLine("\n--- Configuración de Reglas de Carpetas ---");
             Console.WriteLine("Para cada tipo de regla de carpeta, se le preguntará si desea configurarla.");
             Console.WriteLine("Si elige sí, podrá añadir uno o más patrones de carpeta.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
 
-            if (ConsoleMenu.Confirm("¿Configurar 'Carpetas de Rechazo Forzado'?\n(RECHAZA el archivo si la ruta contiene estas carpetas, ignora otras reglas de aceptación)"))
+            if (ConsoleMenuBuilder.Confirm("¿Configurar 'Carpetas de Rechazo Forzado'?\n(RECHAZA el archivo si la ruta contiene estas carpetas, ignora otras reglas de aceptación)"))
                 newFilter.FolderRejectForced = ConfigureFolderMatchList("Carpetas de Rechazo Forzado",
                     "Archivos en rutas que contengan estas carpetas serán SIEMPRE RECHAZADOS.");
             else newFilter.FolderRejectForced = new List<FolderMatch>();
 
-            if (ConsoleMenu.Confirm("\n¿Configurar 'Carpetas de Aceptación Forzada'?\n(ACEPTA el archivo si la ruta contiene estas carpetas, anulado solo por 'Rechazo Forzado de Carpeta')"))
+            if (ConsoleMenuBuilder.Confirm("\n¿Configurar 'Carpetas de Aceptación Forzada'?\n(ACEPTA el archivo si la ruta contiene estas carpetas, anulado solo por 'Rechazo Forzado de Carpeta')"))
                 newFilter.FolderAcceptForced = ConfigureFolderMatchList("Carpetas de Aceptación Forzada",
                     "Archivos en rutas que contengan estas carpetas serán ACEPTADOS (a menos que un Rechazo Forzado de Carpeta aplique).");
             else newFilter.FolderAcceptForced = new List<FolderMatch>();
 
-            if (ConsoleMenu.Confirm("\n¿Configurar 'Carpetas de Rechazo si se Encuentran'?\n(RECHAZA si no hay 'Aceptación Forzada')"))
+            if (ConsoleMenuBuilder.Confirm("\n¿Configurar 'Carpetas de Rechazo si se Encuentran'?\n(RECHAZA si no hay 'Aceptación Forzada')"))
                 newFilter.FolderRejectIfFound = ConfigureFolderMatchList("Carpetas de Rechazo si se Encuentran",
                     "Archivos en rutas que contengan estas carpetas serán RECHAZADOS (a menos que una Aceptación Forzada aplique).");
             else newFilter.FolderRejectIfFound = new List<FolderMatch>();
 
-            if (ConsoleMenu.Confirm("\n¿Configurar 'Carpetas de Aceptación si se Encuentran'?\n(ACEPTA si no hay alguna regla de rechazo que aplique)"))
+            if (ConsoleMenuBuilder.Confirm("\n¿Configurar 'Carpetas de Aceptación si se Encuentran'?\n(ACEPTA si no hay alguna regla de rechazo que aplique)"))
                 newFilter.FolderAcceptIfFound = ConfigureFolderMatchList("Carpetas de Aceptación si se Encuentran",
                     "Archivos en rutas que contengan estas carpetas serán ACEPTADOS (a menos que una regla de Rechazo aplique).");
             else newFilter.FolderAcceptIfFound = new List<FolderMatch>();
 
             // --- Configuración de Reglas de Nombres de Archivo (Expresiones Regulares) ---
             Console.WriteLine("\n--- Configuración de Reglas para Nombres de Archivo (usando Expresiones Regulares) ---");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
 
-            if (ConsoleMenu.Confirm("¿Configurar 'Regex de Rechazo de Archivos'?\n(Nombres de archivo que coincidan serán RECHAZADOS, a menos que haya 'Aceptación Forzada de Archivo')"))
+            if (ConsoleMenuBuilder.Confirm("¿Configurar 'Regex de Rechazo de Archivos'?\n(Nombres de archivo que coincidan serán RECHAZADOS, a menos que haya 'Aceptación Forzada de Archivo')"))
                 newFilter.FileRejectRegex = ConfigureStringList("Regex de Rechazo de Archivos",
                     "Los nombres de archivo que coincidan con estas expresiones regulares serán RECHAZADOS.", isRegexList: true);
             else newFilter.FileRejectRegex = new List<string>();
 
-            if (ConsoleMenu.Confirm("\n¿Configurar 'Regex de Aceptación de Archivos'?\n(Nombres de archivo que coincidan serán ACEPTADOS, a menos que una regla de rechazo aplique)"))
+            if (ConsoleMenuBuilder.Confirm("\n¿Configurar 'Regex de Aceptación de Archivos'?\n(Nombres de archivo que coincidan serán ACEPTADOS, a menos que una regla de rechazo aplique)"))
                 newFilter.FileAcceptRegex = ConfigureStringList("Regex de Aceptación de Archivos",
                     "Los nombres de archivo que coincidan con estas expresiones regulares serán ACEPTADOS.", isRegexList: true);
             else newFilter.FileAcceptRegex = new List<string>();
@@ -339,7 +340,7 @@ namespace ListProductsImages
             ShowFilter(newFilter); // Tu método existente para mostrar detalles del filtro
 
             Console.WriteLine("\n----------------------------------------------------");
-            if (ConsoleMenu.Confirm("¿Desea guardar este nuevo filtro personalizado?"))
+            if (ConsoleMenuBuilder.Confirm("¿Desea guardar este nuevo filtro personalizado?"))
             {
                 // Asumiendo que AppSettings tiene: public List<FilterCriteria> CustomPresets { get; set; }
                 _userSettings.CustomFiltersContainer.Filters.Add(newFilter);
@@ -350,7 +351,7 @@ namespace ListProductsImages
             {
                 Console.WriteLine("Creación de filtro cancelada. No se guardaron los cambios.");
             }
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private List<FolderMatch> ConfigureFolderMatchList(string listFriendlyName, string itemPurposeDescription)
@@ -366,12 +367,12 @@ namespace ListProductsImages
             while (true)
             {
                 Console.WriteLine($"\nDefiniendo Condición de Carpeta #{itemCount} para '{listFriendlyName}':");
-                string matchPattern = ConsoleMenu.AskString($"  Patrón de Carpeta #{itemCount} (ej: '_baja', 'Final'): ", allowEmpty: true);
+                string matchPattern = ConsoleMenuBuilder.AskString($"  Patrón de Carpeta #{itemCount} (ej: '_baja', 'Final'): ", allowEmpty: true);
 
                 if (string.IsNullOrWhiteSpace(matchPattern)) break; // El usuario ha terminado de añadir a esta lista
 
                 // Selección simplificada para MatchType (Contains o Exact)
-                bool isExactMatch = ConsoleMenu.Confirm(
+                bool isExactMatch = ConsoleMenuBuilder.Confirm(
                     "  ¿El patrón debe coincidir de forma EXACTA con el nombre de la carpeta?\n" +
                     "  (E para Coincidencia Exacta, P para Coincidencia Parcial - el nombre contiene el patrón)",
                     defaultIfInvalid: false, trueKey: 'E', falseKey: 'P'
@@ -386,7 +387,7 @@ namespace ListProductsImages
             }
 
             Console.WriteLine($"\nSe configuraron {folderMatches.Count} condiciones para '{listFriendlyName}'.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
             return folderMatches;
         }
 
@@ -406,7 +407,7 @@ namespace ListProductsImages
             int itemCount = 1;
             while (true)
             {
-                string entry = ConsoleMenu.AskString($"  {(isRegexList ? "Expresión Regular" : "Entrada")} #{itemCount}: ", allowEmpty: true);
+                string entry = ConsoleMenuBuilder.AskString($"  {(isRegexList ? "Expresión Regular" : "Entrada")} #{itemCount}: ", allowEmpty: true);
                 if (string.IsNullOrWhiteSpace(entry))
                 {
                     break;
@@ -416,7 +417,7 @@ namespace ListProductsImages
                 itemCount++;
             }
             Console.WriteLine($"\nSe configuraron {stringEntries.Count} entradas para '{listFriendlyName}'.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
             return stringEntries;
         }
 
@@ -424,15 +425,15 @@ namespace ListProductsImages
         {
             Console.Clear();
             List<FilterCriteria> filters = _userSettings.CustomFiltersContainer.Filters;
-            FilterCriteria? selectedFilter = ConsoleMenu.ShowAndSelectItem("Selecciona el filtro para eliminar", "", filters, fc => fc.Name);
+            FilterCriteria? selectedFilter = ConsoleMenuBuilder.ShowAndSelectItem("Selecciona el filtro para eliminar", "", filters, fc => fc.Name);
             if (selectedFilter == null) return;
 
             Console.Clear();
             Console.WriteLine($"Se escogió \"{selectedFilter.Name}\"");
             Console.WriteLine($"Descripción: {selectedFilter.Description}");
             Console.WriteLine();
-            if (!ConsoleMenu.Confirm("¿Confirma que desea eliminarlo? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
-            if (!ConsoleMenu.Confirm("[Doble Confirmación]\n¿Confirma que desea eliminarlo? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea eliminarlo? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("[Doble Confirmación]\n¿Confirma que desea eliminarlo? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
             filters.Remove(selectedFilter);
             _userSettings.CustomFiltersContainer.Filters = filters;
             SaveUserSettings();
@@ -440,8 +441,8 @@ namespace ListProductsImages
 
         private void DeleteAllFilters()
         {
-            if (!ConsoleMenu.Confirm("¿Confirma que desea eliminar TODOS los filtros personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
-            if (!ConsoleMenu.Confirm("[Doble Confirmación]\n¿Confirma que desea eliminar TODOS los filtros personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea eliminar TODOS los filtros personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("[Doble Confirmación]\n¿Confirma que desea eliminar TODOS los filtros personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
 
             _userSettings.CustomFiltersContainer ??= new();
             _userSettings.CustomFiltersContainer.Filters ??= new();
@@ -450,7 +451,7 @@ namespace ListProductsImages
             SaveUserSettings();
 
             Console.WriteLine("Todos los filtros personalizados han sido eliminados.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private void HandlePreferencesOption()
@@ -459,7 +460,7 @@ namespace ListProductsImages
             {
                 Console.WriteLine("\n--- Preferencias ---");
 
-                ConsoleMenu.ShowAndProcessMenu(
+                ConsoleMenuBuilder.ShowAndProcessMenu(
                         title: "Preferencias",
                         subtitle: "",
                         menuItems: _preferencesItems,
@@ -494,16 +495,16 @@ namespace ListProductsImages
             $"Ultima Ruta Personalizada: {_userSettings.LastAnalyzedPath}\n"
             );
 
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private void ChangeActualListPath()
         {
             Console.WriteLine($"Ruta Actual de Listado: {_currentListSourcePath}");
-            string path = ConsoleMenu.AskPath(requireExistence: true, requireValidPath: false);
+            string path = ConsoleMenuBuilder.AskPath(requireExistence: true, requireValidPath: false);
             if (path == "") { return; }
             Console.WriteLine($"Se ingresó: \"{path}\"");
-            if (!ConsoleMenu.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Actual de Listado?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Actual de Listado?")) { return; }
             _currentListSourcePath = path;
             SaveUserSettings();
         }
@@ -511,43 +512,43 @@ namespace ListProductsImages
         private void ChangeActualOutputPath()
         {
             Console.WriteLine($"Ruta Actual de Listado: {_currentOutputDirectory}");
-            string path = ConsoleMenu.AskPath(requireExistence: true, requireValidPath: false);
+            string path = ConsoleMenuBuilder.AskPath(requireExistence: true, requireValidPath: false);
             if (path == "") { return; }
             Console.WriteLine($"Se ingresó: \"{path}\"");
-            if (!ConsoleMenu.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Actual de Salida?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Actual de Salida?")) { return; }
             _currentOutputDirectory = path;
             SaveUserSettings();
         }
 
-        private void ToggleUseExecutionPathAsListSource() { QuantumTools.Toggle(ref _userSettings.UseExecutionPathAsListSource); }
-        private void ToggleUseExecutionPathAsOutputDirectory() { QuantumTools.Toggle(ref _userSettings.UseExecutionPathAsOutputDirectory); }
+        private void ToggleUseExecutionPathAsListSource() { CoreUtils.Toggle(ref _userSettings.UseExecutionPathAsListSource); }
+        private void ToggleUseExecutionPathAsOutputDirectory() { CoreUtils.Toggle(ref _userSettings.UseExecutionPathAsOutputDirectory); }
         private void ChangeCustomListSourcePath()
         {
             Console.WriteLine($"Ruta de Listado Predeterminada: {_userSettings.CustomListSourcePath}");
-            string path = ConsoleMenu.AskPath(requireExistence: true, requireValidPath: false);
+            string path = ConsoleMenuBuilder.AskPath(requireExistence: true, requireValidPath: false);
             if (path == "") { return; }
             Console.WriteLine($"Se ingresó: \"{path}\"");
-            if (!ConsoleMenu.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Predeterminada de Listado?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Predeterminada de Listado?")) { return; }
             _userSettings.CustomListSourcePath = path;
             SaveUserSettings();
         }
         private void ChangeCustomOutputDirectory()
         {
             Console.WriteLine($"Ruta de Listado Predeterminada: {_userSettings.CustomOutputDirectory}");
-            string path = ConsoleMenu.AskPath(requireExistence: true, requireValidPath: false);
+            string path = ConsoleMenuBuilder.AskPath(requireExistence: true, requireValidPath: false);
             if (path == "") { return; }
             Console.WriteLine($"Se ingresó: \"{path}\"");
-            if (!ConsoleMenu.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Predeterminada de Salida?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿El Path ingresado es el correcto?¿Confirma que desea actualizar la Ruta Predeterminada de Salida?")) { return; }
             _userSettings.CustomOutputDirectory = path;
             SaveUserSettings();
         }
         private void ChangeCustomOutputFileName()
         {
             Console.WriteLine($"Nombre de Archivo de Salida: {_userSettings.OutputFileName}");
-            string name = ConsoleMenu.AskFileName(extension: ".txt", requireValidName: false);
+            string name = ConsoleMenuBuilder.AskFileName(extension: ".txt", requireValidName: false);
             if (name == "") { return; }
             Console.WriteLine($"Se ingresó: \"{name}\"");
-            if (!ConsoleMenu.Confirm("¿El nombre ingresado es el correcto?¿Confirma que desea actualizar el Nombre de Archivo de Salida?")) { return; }
+            if (!ConsoleMenuBuilder.Confirm("¿El nombre ingresado es el correcto?¿Confirma que desea actualizar el Nombre de Archivo de Salida?")) { return; }
             _userSettings.OutputFileName = name;
             SaveUserSettings();
         }
@@ -557,7 +558,7 @@ namespace ListProductsImages
             {
                 Console.WriteLine("\n--- Restaurar Preferencias ---");
 
-                ConsoleMenu.ShowAndProcessMenu(
+                ConsoleMenuBuilder.ShowAndProcessMenu(
                         title: "Restaurar Preferencias",
                         subtitle: "PRECAUCIÓN: Estas acciones son irreversibles.",
                         menuItems: _restorePreferencesItems,
@@ -570,8 +571,8 @@ namespace ListProductsImages
 
         private void RestorePreferences()
         {
-            if (!ConsoleMenu.Confirm("¿Confirma que desea restablecer los ajustes personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
-            if (!ConsoleMenu.Confirm("[Doble Confirmación]\n¿Confirma que desea restablecer los ajustes personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea restablecer los ajustes personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("[Doble Confirmación]\n¿Confirma que desea restablecer los ajustes personalizados? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
 
             FilterContainer currentFilterContainer = _userSettings.CustomFiltersContainer ?? new();
 
@@ -580,33 +581,33 @@ namespace ListProductsImages
             SaveUserSettings();
             InitializeCurrentPaths();
             Console.WriteLine("Ajustes restablecidos. Los filtros personalizados han sido conservados.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private void RestoreApp()
         {
-            if (!ConsoleMenu.Confirm("¿Confirma que desea restablecer TODA la aplicación? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
-            if (!ConsoleMenu.Confirm("[Doble Confirmación]\n¿Confirma que desea restablecer TODA la aplicación? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea restablecer TODA la aplicación? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
+            if (!ConsoleMenuBuilder.Confirm("[Doble Confirmación]\n¿Confirma que desea restablecer TODA la aplicación? (Esta acción es irreversible)", defaultIfInvalid: false)) return;
 
             _userSettings = new();
             SaveUserSettings();
             InitializeCurrentPaths();
             Console.WriteLine("Toda la configuración de la aplicación ha sido restablecida a sus valores predeterminados.");
-            ConsoleMenu.Pause();
+            ConsoleMenuBuilder.Pause();
         }
 
         private void UninstallApp()
         {
-            if (!ConsoleMenu.Confirm("¿Confirma que desea borrar TODOS los datos de configuración guardados de esta aplicación? (Esta acción es irreversible)", defaultIfInvalid: false))
+            if (!ConsoleMenuBuilder.Confirm("¿Confirma que desea borrar TODOS los datos de configuración guardados de esta aplicación? (Esta acción es irreversible)", defaultIfInvalid: false))
                 return;
 
-            if (!ConsoleMenu.Confirm("[Doble Confirmación]\n¿Confirma que desea borrar TODOS los datos de configuración guardados de esta aplicación? (Esta acción es irreversible)", defaultIfInvalid: false))
+            if (!ConsoleMenuBuilder.Confirm("[Doble Confirmación]\n¿Confirma que desea borrar TODOS los datos de configuración guardados de esta aplicación? (Esta acción es irreversible)", defaultIfInvalid: false))
                 return;
 
             _userSettings = new();
             SaveUserSettings();
 
-            bool appFolderDeleted = QuantumTools.TryDeleteDirectory(_appSpecificFolder, "la aplicación",true);
+            bool appFolderDeleted = CoreUtils.TryDeleteDirectory(_appSpecificFolder, "la aplicación",true);
 
             if (appFolderDeleted)
             {
@@ -615,11 +616,11 @@ namespace ListProductsImages
             }
             else
             {
-                ConsoleMenu.Pause();
+                ConsoleMenuBuilder.Pause();
                 return; // No continúa si no se pudo borrar la carpeta principal
             }
 
-            bool familyFolderDeleted = QuantumTools.TryDeleteDirectory(AppSettings.AppFamilyFolder, "la familia");
+            bool familyFolderDeleted = CoreUtils.TryDeleteDirectory(AppSettings.AppFamilyFolder, "la familia");
 
             if (familyFolderDeleted)
             {
@@ -631,7 +632,7 @@ namespace ListProductsImages
             }
 
             Console.WriteLine("El programa se cerrará ahora.");
-            ConsoleMenu.Exit();
+            ConsoleMenuBuilder.Exit();
         }
 
     }

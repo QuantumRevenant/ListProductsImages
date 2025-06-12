@@ -1,0 +1,3 @@
+[submodule "libs/QuantumKit"]
+	path = libs/QuantumKit
+	url = https://github.com/quantumrevenant/QuantumKit.git

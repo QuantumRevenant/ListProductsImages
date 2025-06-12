@@ -1,23 +1,8 @@
 # ListProductsImages 🖼️
 
-Console application in C# (.NET 8.0) that allows you to explore a directory and its subdirectories, list all found files, filter them using defined conditions (regex, folder names, extensions, etc.), and generate a `.txt` file with the results.
+**ListProductsImages** is a console application written in **C# (.NET 8.0)** that allows you to recursively explore a directory, filter image files based on customizable rules, and generate a `.txt` file with the results.
 
-The system uses an interactive console menu to select the base path, define filters, and set output options.
-
-## Table of Contents 📜
-
-- [Requirements](#requirements-📦)  
-- [Installation](#installation-⚙️)  
-- [Usage](#usage-🚀)  
-- [Output Example](#output-example-🛠️)  
-- [Key Features](#key-features-📁)  
-- [License](#license-📝)  
-- [Contact](#contact-✉️)  
-- [Contributing](#contributing-🤝)  
-- [Contributors](#contributors-👥)  
-- [Notice](#notice-⚠️)  
-- [Dependencies](#dependencies-🧩)  
-- [Changelog](#changelog-📘)
+The system offers an interactive menu interface to set paths, filters, and output options in a simple and user-friendly way.
 
 ---
 
@@ -52,83 +37,32 @@ Run the main project:
 dotnet run --project ListProductsImages/ListProductsImages.csproj
 ```
 
-The application will launch an interactive console interface where you can:
+Once running, the app will let you:
 
-- View the current working directory
-- Change the base directory path
-- Define filtering rules (by folder name or file name regex)
-- Select the output path and file name
-- Generate and save the filtered file list as a `.txt`
+- View and change the base directory
+- Set include/exclude filters (folder names, regex)
+- Choose output path and file name
+- Export a `.txt` with the filtered results
 
-> **Note**: Command-line argument support will be added soon.
-
----
-
-## Output Example 🛠️
-
-### File System Structure
-
-```
-/Root/
-├── /Approved Folder/
-│   ├── Cod001.jpg
-│   ├── Cod002 Description.png
-│   ├── Cod003-Cod004.jpg
-│   ├── Cod005-Cod006 Description.webp
-│   ├── /Dissaproved Folder/
-│   │   ├── Cod007.jpg
-│   │   ├── Cod008 Description.png
-│   │   ├── Cod009-Cod010.jpg
-│   │   └── Cod011-Cod012 Description.webp
-│   └── /Neutral SubFolder/
-│       ├── Cod013.jpg
-│       ├── Cod014 Description.png
-│       ├── Cod015-Cod016.jpg
-│       └── Cod017-Cod018 Description.webp
-├── /Disapproved Folder/
-│   ├── Cod019.jpg
-│   ├── Cod020 Description.png
-│   ├── Cod021-Cod022.jpg
-│   └── Cod023-Cod024 Description.webp
-└── /Neutral Folder/
-    ├── Cod025.jpg
-    ├── Cod026 Description.png
-    ├── Cod027-Cod028.jpg
-    └── Cod029-Cod030 Description.webp
-```
-
-### Console Filtering Rules
-
-```
-Reject: "Disapproved" | Match Mode: Contains  
-Accept: "Approved"    | Match Mode: Exact
-```
-
-### Output File
-
-```
-Cod001
-Cod002
-Cod003
-Cod004
-Cod005
-Cod006
-Cod013
-Cod014
-Cod015
-Cod016
-Cod017
-Cod018
-```
+> **Note**: Command-line argument support is planned for future releases.
 
 ---
 
-## Key Features 📁
+## Key Features 🧩
 
-- Recursive directory exploration
-- Customizable filters (filename regex, folder name includes/excludes)
-- Export filtered results to a `.txt` file
-- Interactive console interface (CLI arguments will come in future versions)
+- Recursive directory scanning  
+- Flexible filtering (by folder, regex, file type)  
+- Clean `.txt` export of filtered image codes  
+- Interactive console interface with counters  
+- Integrated with [QuantumKit](https://github.com/QuantumRevenant/QuantumKit) for utility functions
+
+---
+
+## Third-party dependencies 🔗
+
+This project integrates the following external library:
+
+- [QuantumKit](https://github.com/QuantumRevenant/QuantumKit) – Personal utility toolkit used for file handling, string manipulation, and console enhancements.
 
 ---
 
@@ -140,20 +74,18 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact ✉️
 
-If you have any questions or feedback, feel free to reach out:
-
-[![X (Formerly Twitter)](https://img.shields.io/badge/X_(Twitter)%09--%40QuantumRevenant-%23000000.svg?logo=X&logoColor=white)](https://twitter.com/QuantumRevenant)  
-[![GitHub](https://img.shields.io/badge/GitHub%09--%40QuantumRevenant-%23121011.svg?logo=github&logoColor=white)](https://github.com/YourGitHubUsername)
+[![X (Twitter)](https://img.shields.io/badge/X_(Twitter)%09--%40QuantumRevenant-%23000000.svg?logo=X&logoColor=white)](https://twitter.com/QuantumRevenant)  
+[![GitHub](https://img.shields.io/badge/GitHub%09--%40QuantumRevenant-%23121011.svg?logo=github&logoColor=white)](https://github.com/QuantumRevenant)
 
 ---
 
 ## Contributing 🤝
 
-See [CONTRIBUTING](CONTRIBUTING.md) for contribution guidelines.
+See the [CONTRIBUTING](CONTRIBUTING.md) file for contribution guidelines.
 
 ---
 
-## Contributors 👥
+## Authors 👥
 
 - [QuantumRevenant](https://github.com/QuantumRevenant)
 
@@ -161,16 +93,10 @@ See [CONTRIBUTING](CONTRIBUTING.md) for contribution guidelines.
 
 ## Notice ⚠️
 
-This codebase and its documentation were initially written in Spanish or a Spanish-English mix. If you intend to adapt this project to a different programming language (e.g., C++ or Java), make the necessary adjustments accordingly.
-
----
-
-## Dependencies 🧩
-
-This project relies solely on the .NET 8.0 SDK. Additional utilities are included within the repository.
+This project was originally written in Spanish or a Spanish-English hybrid. If adapting to another language or platform (e.g., C++, Java), apply the necessary modifications.
 
 ---
 
 ## Changelog 📘
 
-See [CHANGELOG](CHANGELOG.md) for changes
+See [CHANGELOG](CHANGELOG.md) for the list of updates.
