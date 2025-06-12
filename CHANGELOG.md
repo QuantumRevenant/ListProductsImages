@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2025-06-12
 ### Added
-- Folder and image counters in the interactive interface for improved user feedback.
+- Countdown timer in the interactive interface to enhance user feedback during long operations.
 - Integration of the `QuantumKit` submodule as a replacement for the previous `Utils` folder.
 
 ### Changed
