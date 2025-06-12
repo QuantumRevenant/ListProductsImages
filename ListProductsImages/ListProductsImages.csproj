@@ -9,10 +9,7 @@
   
   <ItemGroup>
     <EmbeddedResource Include="Resources/DefaultFilterPresets.json" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\libs\QuantumKit\QuantumKit.Tools\QuantumKit.csproj" />
+    <ProjectReference Include="..\libs\QuantumKit\QuantumKit\QuantumKit.csproj" />
   </ItemGroup>
 
 </Project>

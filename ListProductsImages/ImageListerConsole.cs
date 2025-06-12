@@ -4,6 +4,7 @@ using ListProductsImages.Pipeline;
 using QuantumKit.UI;
 using QuantumKit.Tools.IO;
 using QuantumKit.Tools;
+using System.Reflection;
 
 namespace ListProductsImages
 {
@@ -101,7 +102,7 @@ namespace ListProductsImages
         private void LoadDefaultPresets()
         {
             string resourceName = "ListProductsImages.Resources.DefaultFilterPresets.json";
-            string json = JsonUtils.JsonFromEmbeddedResource(resourceName);
+            string json = JsonUtils.JsonFromEmbeddedResource(resourceName,Assembly.GetExecutingAssembly());
             _defaultFilterPresets = JsonSerializer.Deserialize<FilterContainer>(json) ?? new();
         }
         private void LoadUserSettings()

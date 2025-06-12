@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListProductsImages", "ListProductsImages\ListProductsImages.csproj", "{B97F7921-C12A-42C1-B292-9132751F766F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantumKit", "libs\QuantumKit\QuantumKit.Tools\QuantumKit.csproj", "{F5A4B7F6-7DFE-3605-4070-E96098AA10AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantumKit", "libs\QuantumKit\QuantumKit\QuantumKit.csproj", "{F5A4B7F6-7DFE-3605-4070-E96098AA10AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
